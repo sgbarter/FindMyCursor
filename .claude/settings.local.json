@@ -9,7 +9,10 @@
       "Bash(ls -la \"/c/Program Files \\(x86\\)/World of Warcraft/_retail_/Interface/AddOns/TomTom/Media/\")",
       "Bash(ls -la \"/c/Program Files \\(x86\\)/World of Warcraft/_retail_/Interface/AddOns/TomTom/Images/\")",
       "Bash(wc -l \"/c/Program Files \\(x86\\)/World of Warcraft/_retail_/Interface/AddOns/TomTom/TomTom.lua\")",
-      "Bash(wc -l \"/c/Program Files \\(x86\\)/World of Warcraft/_retail_/Interface/AddOns/TomTom/TomTom_Waypoints.lua\")"
+      "Bash(wc -l \"/c/Program Files \\(x86\\)/World of Warcraft/_retail_/Interface/AddOns/TomTom/TomTom_Waypoints.lua\")",
+      "Bash(ls -la \"/c/Program Files \\(x86\\)/World of Warcraft/_retail_/Interface/AddOns/TomTom/Themes/\")",
+      "Bash(ls -la \"/c/Program Files \\(x86\\)/World of Warcraft/_retail_/Interface/AddOns/TomTom/Images/Modern/\")",
+      "Bash(ls -la \"/c/Program Files \\(x86\\)/World of Warcraft/_retail_/Interface/AddOns/TomTom/Images/Modern/Waypoints/\")"
     ]
   }
 }
