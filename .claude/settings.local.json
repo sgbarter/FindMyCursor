@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find \"C:/Program Files \\(x86\\)/World of Warcraft/_retail_/Interface/AddOns/FindMyCursor/\" -type f)",
+      "Bash(ls -la \"C:/Program Files \\(x86\\)/World of Warcraft/_retail_/Interface/AddOns/FindMyCursor/Textures/\")",
+      "Bash(find 'C:/Program Files \\(x86\\)/World of Warcraft/_retail_/Interface/AddOns/' -name *glow* -o -name *ring* -o -name *circle* -o -name *orb*)",
+      "Bash(ls -la \"C:\\\\Program Files \\(x86\\)\\\\World of Warcraft\\\\_retail_\\\\Interface\\\\AddOns\\\\TomTom\"\")",
+      "Bash(ls -la \"/c/Program Files \\(x86\\)/World of Warcraft/_retail_/Interface/AddOns/TomTom/\")",
+      "Bash(ls -la \"/c/Program Files \\(x86\\)/World of Warcraft/_retail_/Interface/AddOns/TomTom/Media/\")",
+      "Bash(ls -la \"/c/Program Files \\(x86\\)/World of Warcraft/_retail_/Interface/AddOns/TomTom/Images/\")",
+      "Bash(wc -l \"/c/Program Files \\(x86\\)/World of Warcraft/_retail_/Interface/AddOns/TomTom/TomTom.lua\")",
+      "Bash(wc -l \"/c/Program Files \\(x86\\)/World of Warcraft/_retail_/Interface/AddOns/TomTom/TomTom_Waypoints.lua\")"
+    ]
+  }
+}

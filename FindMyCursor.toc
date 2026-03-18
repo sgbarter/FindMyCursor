@@ -1,0 +1,8 @@
+## Interface: 120001
+## Title: FindMyCursor
+## Notes: Highlights the cursor during combat to reduce visual clutter confusion.
+## Author: sgbar
+## Version: 1.0.0
+## SavedVariables: FindMyCursorDB
+
+FindMyCursor.lua
