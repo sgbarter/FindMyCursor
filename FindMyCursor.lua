@@ -32,7 +32,6 @@ local db = {
     mapRingSize     = DEFAULTS.mapRingSize,
 }
 
-FindMyCursorDB = FindMyCursorDB or {}
 
 -------------------------------------------------------------------------------
 -- Cursor indicator
@@ -143,7 +142,8 @@ eventFrame:RegisterEvent("UPDATE_INSTANCE_INFO")
 
 eventFrame:SetScript("OnEvent", function(self, event, arg1)
     if event == "ADDON_LOADED" and arg1 == ADDON_NAME then
-        -- Merge saved vars over defaults
+        -- Saved variables are now loaded; initialize if this is a first run
+        FindMyCursorDB = FindMyCursorDB or {}
         for k, v in pairs(db) do
             if FindMyCursorDB[k] == nil then
                 FindMyCursorDB[k] = v
@@ -156,6 +156,7 @@ eventFrame:SetScript("OnEvent", function(self, event, arg1)
         local canvas = WorldMapFrame.ScrollContainer:GetScrollChild()
         mapRing = CreateFrame("Frame", nil, canvas)
         mapRing:SetSize(db.mapRingSize, db.mapRingSize)
+        mapRing:SetFrameStrata("TOOLTIP")
         mapRing:Hide()
 
         -- Three concentric circles using TempPortraitAlphaMask (guaranteed centered)
@@ -170,29 +171,31 @@ eventFrame:SetScript("OnEvent", function(self, event, arg1)
         end
         ApplyColor()
 
+        local hasPosition = false
         mapRing:SetScript("OnUpdate", function(self, elapsed)
             mapPulseElapsed      = mapPulseElapsed + elapsed
             mapRingUpdateElapsed = mapRingUpdateElapsed + elapsed
 
             if mapRingUpdateElapsed >= 0.05 then
                 mapRingUpdateElapsed = 0
+                local currentCanvas = WorldMapFrame.ScrollContainer:GetScrollChild()
                 local mapID = WorldMapFrame:GetMapID()
-                if mapID then
+                if mapID and currentCanvas then
                     local pos = C_Map.GetPlayerMapPosition(mapID, "player")
                     if pos then
                         local x, y = pos:GetXY()
-                        local cw, ch = canvas:GetWidth(), canvas:GetHeight()
+                        local cw, ch = currentCanvas:GetWidth(), currentCanvas:GetHeight()
                         if cw > 0 then
                             self:ClearAllPoints()
-                            self:SetPoint("CENTER", canvas, "TOPLEFT", x * cw, -y * ch)
+                            self:SetPoint("CENTER", currentCanvas, "TOPLEFT", x * cw, -y * ch)
+                            hasPosition = true
                         end
+                    else
+                        hasPosition = false
                     end
                 end
-                -- Normalize by effective scale so the ring stays the same screen
-                -- size whether the map is normal or maximized.
-                local ringCanvasSize = db.mapRingSize * UIParent:GetEffectiveScale() / canvas:GetEffectiveScale()
+                local ringCanvasSize = db.mapRingSize * UIParent:GetEffectiveScale() / currentCanvas:GetEffectiveScale()
                 self:SetSize(ringCanvasSize, ringCanvasSize)
-                -- Layer sizes: 100%, 70%, 40% — bright center, dimmer edge
                 local scales = { 1.0, 0.7, 0.4 }
                 for i, t in ipairs(mapRingLayers) do
                     local s = scales[i] or 0.4
@@ -200,7 +203,9 @@ eventFrame:SetScript("OnEvent", function(self, event, arg1)
                 end
             end
 
-            if db.pulseSpeed > 0 then
+            if not hasPosition then
+                self:SetAlpha(0)
+            elseif db.pulseSpeed > 0 then
                 local pulse = 0.5 + 0.5 * math.sin(mapPulseElapsed * db.pulseSpeed * math.pi * 2)
                 self:SetAlpha(db.alpha * (0.5 + 0.5 * pulse))
             else
@@ -570,6 +575,13 @@ SlashCmdList["FINDMYCURSOR"] = function(msg)
         else
             print("|cff00ccff[FindMyCursor]|r Usage: /fmc color <r> <g> <b>  (0-1 each)")
         end
+
+    elseif cmd == "dbinfo" then
+        print(string.format("|cff00ccff[FMC dbinfo]|r FindMyCursorDB is %s", type(FindMyCursorDB)))
+        print(string.format("  same table as db: %s", tostring(db == FindMyCursorDB)))
+        print(string.format("  db.size=%.0f  FindMyCursorDB.size=%s", db.size, tostring(FindMyCursorDB and FindMyCursorDB.size)))
+        print(string.format("  db.alpha=%.2f  db.triggerCombat=%s  db.triggerLocate=%s",
+            db.alpha, tostring(db.triggerCombat), tostring(db.triggerLocate)))
 
     elseif cmd == "debug" then
         local inInst, instType = IsInInstance()
